@@ -1,0 +1,38 @@
+$cssPrefix: 'ms-notify';
+
+.#{$cssPrefix} {
+	width: 100px;
+	height: 100px;
+	background-color: red;
+	position: fixed;
+	// display: none;
+	transition: all 1s;
+	z-index: 99;
+	.icon {
+		width: 1em; height: 1em;
+		vertical-align: -0.15em;
+		fill: currentColor;
+		overflow: hidden;
+	}
+	.#{$cssPrefix}-header {
+		position: absolute;
+		height: 40px;
+		line-height: 40px;
+		top: -40px;
+		left: 0;
+		width: 100%;
+		text-align: right;
+		.icon{
+			font-size: 12px;
+			color: #999;
+			vertical-align: middle;
+			cursor: pointer;
+		}
+	}
+	.#{$cssPrefix}-title {
+		display: inline-block;
+		font-size: 12px;
+		color: #999;
+		vertical-align: middle;
+	}
+}
