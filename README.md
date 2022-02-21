@@ -60,3 +60,7 @@ The default configuration for the options parameter is shown below.
 
 - show
 - hide
+
+### License
+
+[MIT](https://choosealicense.com/licenses/mit/)
