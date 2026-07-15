@@ -588,11 +588,18 @@
                 </div>
                 <div style="padding: 50px;">
                      <button class="mybtn resetbtn" data-mode="order">全部重置</button>
+                     <div style="padding: 20px">
+                         <button class="mybtn sct" data-mode="order">实操题</button>
+                     </div>
                      <script>
                          document.querySelector('.resetbtn').addEventListener('click', function() {
                             localStorage.clear();
                             location.reload();
                          });
+                         document.querySelector('.sct').addEventListener('click', function() {
+                            location.href = 'https://vitozyf.github.io/web-notify/code.html';
+                         });
+                     </script>
                      </script>
                      <style>
                          .mybtn {
