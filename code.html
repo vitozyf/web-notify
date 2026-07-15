@@ -1,24 +1,745 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="zh-CN">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenCV 代码补全示例</title>
+    <!-- highlight.js 深色主题与核心库 -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+        hljs.highlightAll();
+    </script>
+    <style>
+        /* 全局重置与容器样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            font-family:
+                "Segoe UI",
+                Roboto,
+                system-ui,
+                -apple-system,
+                sans-serif;
+            padding: 24px;
+        }
+
+        .card {
+            max-width: 960px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 32px 36px;
+            transition: all 0.2s ease;
+        }
+
+        /* 头部信息 */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 8px;
+        }
+
+        .header-icon {
+            font-size: 28px;
+            line-height: 1;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.3px;
+        }
+
+        .subhead {
+            color: #475569;
+            font-size: 15px;
+            margin-left: 42px;
+            margin-bottom: 28px;
+            padding-bottom: 18px;
+            border-bottom: 2px solid #e9edf2;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subhead .hint {
+            background: #eef2ff;
+            color: #4338ca;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* 代码容器 */
+        .code-block {
+            background: #0b1120;
+            border-radius: 14px;
+            padding: 6px 0;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+            margin-bottom: 24px;
+        }
+
+        pre {
+            margin: 0;
+            padding: 18px 28px;
+            background: transparent !important;
+            /* 覆盖 highlight.js 背景 */
+        }
+
+        code {
+            font-family:
+                "JetBrains Mono", "Fira Code", "Cascadia Code", "Consolas", monospace;
+            font-size: 15.5px;
+            line-height: 1.9;
+            color: #e2e8f0;
+            font-weight: 400;
+        }
+
+        /* 自定义高亮微调（让 Python 注释更醒目） */
+        .hljs-comment {
+            color: #94a3b8 !important;
+            font-style: italic;
+        }
+
+        .hljs-keyword {
+            color: #c084fc !important;
+        }
+
+        .hljs-built_in {
+            color: #38bdf8 !important;
+        }
+
+        .hljs-string {
+            color: #a3e635 !important;
+        }
+
+        .hljs-number {
+            color: #fbbf24 !important;
+        }
+
+        .hljs-title {
+            color: #f472b6 !important;
+        }
+
+        .hljs-params {
+            color: #fcd34d !important;
+        }
+
+        /* 底部标签 */
+        .footer-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 6px;
+        }
+
+        .tag {
+            background: #f1f5f9;
+            color: #1e293b;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tag strong {
+            color: #2563eb;
+            font-weight: 700;
+        }
+
+        .tag .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #3b82f6;
+            margin-right: 4px;
+        }
+
+        /* 响应式处理 */
+        @media (max-width: 640px) {
+            .card {
+                padding: 20px 16px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .subhead {
+                margin-left: 0;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            pre {
+                padding: 14px 16px;
+            }
+
+            code {
+                font-size: 14px;
+                line-height: 1.8;
+            }
+        }
+        h1{
+            padding: 20px
+        }
+        h3{
+            padding: 10px;
+        
+        }
+        .nav{
+            display: flex;
+            justify-content: space-around;
+        }
+        #back{
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Task1</body>h1>
-    <h2>步骤1</h2>
-    <code>
-        #1.补全 <1> 处代码，打开USB摄像头设备（设备编号为0）。
-        cap = cv2.VideoCapture(0)
-        #2.补全 <2> 处代码，获取摄像头视频帧的宽度信息。
-        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        #3.补全 <3> 处代码，获取摄像头视频帧的高度信息。
-        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        #4.补全 <4> 处代码，设置视频编码格式（XVID），用于视频写入。
-        fourcc = cv2.VideoWriter_fourcc(*"XVID")
-        #5.补全 <5> 处代码，创建视频写入对象，输出文件名为 “capture.avi”。
-        out = cv2.VideoWriter('capture.avi', fourcc, 20.0, (width, height))
-    </code>
+    <div class="nav">
+        <h1><a id="nav1" href="#Task1">Task1</a></h1>
+        <h1><a id="nav2" href="#Task2">Task2</a></h1>
+        <h1><a id="nav3" href="#Task3">Task3</a></h1>
+    </div>
+    <h1><a id="Task1" href="#">Task1</a></h1>
+    <h3># 步骤1. USB摄像头视频采集</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+#1.补全 <1> 处代码，打开USB摄像头设备（设备编号为0）。
+cap = cv2.VideoCapture(0)
+
+#2.补全 <2> 处代码，获取摄像头视频帧的宽度信息。
+width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+
+#3.补全 <3> 处代码，获取摄像头视频帧的高度信息。
+height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+#4.补全 <4> 处代码，设置视频编码格式（XVID），用于视频写入。
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+
+#5.补全 <5> 处代码，创建视频写入对象，输出文件名为 “capture.avi”。
+out = cv2.VideoWriter('capture.avi', fourcc, 20.0, (width, height))
+
+#6.补全 <6> 处代码，读取摄像头视频帧。
+    ret, frame = cap.read()
+
+#7.补全 <7> 处代码，实现5秒视频采集的时间控制逻辑。
+    if time.time() - start >= 5:
+        break
+
+#8.补全 <8> 处代码，实现按 q 键提前结束采集 的功能。
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+#9.补全 <9> 处代码，释放摄像头与视频写入资源并销毁所有窗口。
+cap.release()
+out.release()
+cv2.destroyAllWindows()
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3>步骤2. 视频帧提取</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+#1.补全 <1> 处代码，从视频文件 “capture.avi” 中读取视频帧。
+cap = cv2.VideoCapture("capture.avi")
+
+#2.补全 <2> 处代码，实现每 20帧提取一帧图像的判断逻辑。
+    if frame_id % 20 == 0:
+
+#3.补全 <3> 处代码，将提取到的视频帧文件名格式命名为 “frame_x.jpg”（x为第x张图片），保存到frames文件夹下。
+        filename =  f"frame_{save_id}.jpg"
+
+#4.补全 <4> 处代码，将图像帧保存为文件。
+        cv2.imwrite(os.path.join("./frames", filename), frame)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤3. 图像批量读取</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+#1.补全 <1> 处代码，读取指定文件夹中的所有图像文件列表。
+files = os.listdir(path) 
+
+#2.补全 <2> 处代码，将文件夹路径与文件名进行拼接生成完整路径。
+    img_path =  os.path.join(path, f)
+
+#3.补全 <3> 处代码，读取图像文件。
+    img = cv2.imread(img_path)
+    
+#4.补全 <4> 处代码，将读取的图像添加到图像列表中。
+    images.append(img)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤4. 图像中心裁剪</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+#1.补全 <1> 处代码，根据图像宽度计算图像中心的 x 坐标。
+cx =  w // 2
+
+#2.补全 <2> 处代码，根据图像高度计算图像中心的 y 坐标。
+cy = h // 2
+
+#3.补全 <3> 处代码，以图像中心为基准裁剪 200×200像素区域。
+crop =  img[cy-100:cy+100, cx-100:cx+100]
+
+#4.补全 <4> 处代码，将裁剪后的图像保存为 “crop.jpg”。
+cv2.imwrite("crop.jpg", crop)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤5. 图像尺寸标准化</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+#1.补全 <1> 处代码，将裁剪后的图像尺寸调整为 224×224像素。
+resize_img = cv2.resize(img, (224, 224))
+
+#2.补全 <2> 处代码，将处理后的图像保存为 “resize.jpg”。
+cv2.imwrite("resize.jpg", resize_img)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤6. 图像增强（CLAHE）</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+#1.补全 <1> 处代码，将彩色图像转换为灰度图像。
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+#2.补全 <2> 处代码，创建CLAHE自适应直方图均衡化对象。
+clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+
+#3.补全 <3> 处代码，对灰度图像执行CLAHE增强处理。
+enhanced = clahe.apply(gray)
+
+#4.补全 <4> 处代码，将增强后的图像保存为 “enhanced.jpg”。
+cv2.imwrite("enhanced.jpg", enhanced)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤7. 数据增强（旋转 + 翻转）</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+#1.补全 <1> 处代码，根据图像中心计算旋转变换矩阵。
+M = cv2.getRotationMatrix2D((w/2, h/2), 45, 1)
+
+#2.补全 <2> 处代码，执行图像旋转操作。
+rot = cv2.warpAffine(img, M, (w, h))
+
+#3.补全 <3> 处代码，对图像执行水平翻转。
+flip_h = cv2.flip(img, 1)
+
+#4.补全 <4> 处代码，对图像执行垂直翻转。
+flip_v = cv2.flip(img, 0)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤8. 边缘检测</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+#1.补全 <1> 处代码，将图像转换为灰度图。
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+#2.补全 <2> 处代码，对图像执行高斯滤波，卷积核大小为 (5,5)。高斯平滑滤波，用于减少图像噪声。
+blur = cv2.GaussianBlur(gray, (5,5), 0) 
+
+#3.补全 <3> 处代码，使用Canny算法进行边缘检测。
+edges = cv2.Canny(blur, 100, 200)
+
+#4.补全 <4> 处代码，将边缘检测结果保存为 "edges.jpg"。
+cv2.imwrite("edges.jpg", edges)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤9. 形态学处理</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+#1.补全 <1> 处代码，创建 5×5矩形结构元素。
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
+
+#2.补全 <2> 处代码，对图像执行膨胀操作。
+dilate = cv2.dilate(img, kernel)
+
+#3.补全 <3> 处代码，对膨胀后的图像执行腐蚀操作。
+erode = cv2.erode(dilate, kernel)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤10. ORB特征检测</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+#1.补全 <1> 处代码，创建ORB特征检测器。
+orb = cv2.ORB_create()
+
+#2.补全 <2> 处代码，检测图像关键点并计算特征描述子。
+kp, des = orb.detectAndCompute(img, None)
+
+#3.补全 <3> 处代码，将检测到的关键点绘制在原图像上。
+kp_img = cv2.drawKeypoints(img, kp, None)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤11. 特征匹配</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+#1.补全 <1> 处代码，创建BFMatcher特征匹配器。
+bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+
+#2.补全 <2> 处代码，对两幅图像的特征描述子执行匹配操作。
+matches = bf.match(des1, des2)
+
+#3.补全 <3> 处代码，根据匹配距离对匹配结果进行排序。
+matches = sorted(matches, key=lambda x: x.distance)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤12. 数据归一化</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+#1.补全 <1> 处代码，将图像数据类型转换为 float32。
+img = img.astype(np.float32)
+
+#2.补全 <2> 处代码，将像素值归一化到 [0,1]区间。
+img_norm = img / 255.0
+
+#3.补全 <3> 处代码，打印归一化图像的最小值。
+print("min:", np.min(img_norm))
+
+#4.补全 <4> 处代码，打印归一化图像的最大值。
+print("max:", np.max(img_norm))
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h1><a id="Task2" href="#">Task2</a></h1>
+    <h3>## 2.环境搭建</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+- ①在<1>处填写代码，使用Sequential函数定义模型；
+    model = Sequential()
+
+- ②在<2>处填写代码，构建第一个卷积层，设置输入尺寸为（224,224,3），滤波器为32，卷积核为3；
+    model.add(Conv2D(32, (3,3), padding='same', activation='relu', input_shape=(224,224,3)))
+
+- ③在<3>处填写代码，构建一个具有3个神经元的全连接层，并使用激活函数为softmax；
+    model.add(Dense(3, activation='softmax')) 
+
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3>## 3.数据集设置</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+- ①在<1>处填写代码，填入训练集所在路径；
+    directory = './datasets/train', # <1> 训练集所在路径
+
+- ②在<2>处填写代码，填入测试集所在路径；
+     directory = './datasets/test', # <2> 测试集所在路径
+
+- ③在<3>处填写代码，设置批处理数量为3；
+    batch_size = 3 # <3> 批处理数量为3
+
+- ④在<4>处填写代码，查看数据标签。
+    print(train_generator.class_indices)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3>## 4.模型编译</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+- ①在<1>处填写代码，创建Adam优化器，并将学习率设置为1e-5；
+    model.compile(optimizer=Adam(learning_rate=1e-5), # <1> Adam优化器，学习率1e-5
+
+- ②在<2>处填写代码，将损失函数设置为多分类交叉熵损失函数；
+     loss='categorical_crossentropy',      # <2> 多分类交叉熵损失
+
+- ③在<3>处填写代码，将评价指标设置为准确率。
+    metrics=['accuracy'])                 # <3> 评价指标为准确率
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3>## 5. 模型微调训练</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+- ①在<1>处填写代码，填入需要载入的预训练模型所在路径；
+    model = load_model('./models/pre_trained_model.h5')   # <1> 预训练模型文件路径（请根据实际路径修改）
+
+- ②在<2>处填写代码，接收数据生成器train_generator作为输入；
+    history = model.fit_generator(generator = train_generator,  # <2> 训练数据生成器
+
+- ③在<3>处填写代码，将训练迭代次数设置为5；
+     epochs= 5,  # <3> 训练迭代次数为5
+
+- ④在<4>处填写代码，传递回调列表；
+     callbacks=callback_lists) # <4> 回调列表
+
+- ⑤填写完成后，运行代码并等待模型训练完成。
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h1><a id="Task3" href="#">Task3</a></h1>
+    <h3># 步骤1. 初始化串口控制</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+#1.补全 <1> 处代码，定义类的初始化方法，设置串口通信参数：端口号默认为"/dev/ttyS0"，波特率默认为9600。
+    def __init__(self, port="/dev/ttyS0", baudrate=9600):
+
+ #2.补全 <2> 处代码，创建串口通信对象，使用指定的端口号和波特率建立连接，并设置超时时间为0.2秒。
+            self.ser = serial.Serial(port=self.port, baudrate=baudrate, timeout=0.2)
+
+ #3.补全 <3> 处代码，将十六进制字符串命令转换为字节类型数据。
+            cmd = bytes.fromhex(command.replace(' ', ''))
+
+ # 4.补全 <4> 处代码，定义开启黄灯指令'01 05 00 11 FF 00 DC 3F'
+        command = '01 05 00 11 FF 00 DC 3F'
+
+ # 5.补全 <5> 处代码，定义关闭黄灯指令'01 05 00 11 00 00 9D CF'
+        command = '01 05 00 11 00 00 9D CF'
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤2. 加载模型与数据</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+# 1.补全 <1> 处代码，使用 NumPy 的加载函数从文件 'X_test.npy' 中读取测试特征数据，并赋值给变量 X_test。
+X_test = np.load('X_test.npy')
+
+# 2.补全 <2> 处代码，使用 NumPy 的加载函数从文件 'y_test.npy' 中读取测试标签数据，并赋值给变量 y_test。
+y_test = np.load('Y_test.npy')
+
+# 3.补全 <3> 处代码，使用 torch.jit 提供的方法，从文件 "model.pt" 中加载已保存的模型（包含结构和参数）。
+model = torch.jit.load('model.pt')
+
+# 4.补全 <4> 处代码，将加载后的模型设置为评估模式，以便进行推理。
+model.eval()
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤3. 预测函数封装</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+# 1.补全 <1> 处代码，将输入数据 x 转换为 torch.float32 类型的张量，并在第 0 维增加一个维度，以满足模型输入的批次格式要求。
+    x = torch.tensor(x, dtype=torch.float32).unsqueeze(0)
+
+# 2.补全 <2> 处代码，使用 model() 对处理后的输入数据 x 进行前向传播，得到模型输出结果。
+        output = model(x)
+
+# 3.补全 <3> 处代码，对模型输出 output 使用 softmax 函数在第 1 维（类别维度）上进行归一化，并取出第 0 个样本中第 1 类的概率值。
+        prob = torch.softmax(output, dim=1)[0, 1].item()
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤4. 决策系统</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+# 1.补全 <1> 处代码，当输入概率 prob 大于等于 0.7 时，返回表示高风险等级的状态字符串 high 和对应颜色标识 red 。
+        return "high", "red"
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤5. 灯光控制系统封装</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+# 1.补全 <1> 处代码，当输入颜色 color 为 "green" 时，调用 light_controller 的方法点亮绿色灯，并在延时后关闭绿色灯。(两行代码)
+        light_controller.turn_on_green()
+        time.sleep(0.5)
+        light_controller.turn_off_green()
+        time.sleep(0.5)
+
+# 2.补全 <2> 处代码，当输入颜色 color 为 "yellow" 时，调用 light_controller 的方法点亮黄色灯，并在延时后关闭黄色灯。(两行代码)
+        light_controller.turn_on_yellow()
+        time.sleep(0.5)
+        light_controller.turn_off_yellow()
+        time.sleep(0.5)
+
+ # 3.补全 <3> 处代码，当输入颜色 color 为 "red" 时，调用 light_controller 的方法点亮红色灯，并在延时后关闭红色灯。(两行代码)
+        light_controller.turn_on_red()
+        time.sleep(0.5)
+        light_controller.turn_off_red()
+        time.sleep(0.5)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤6. AI应用流程</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+# 1.补全 <1> 处代码，使用 random.randint() 随机函数在测试集范围内生成一个索引 idx（范围为 0 到 len(X_test)-1）。
+idx = random.randint(0, len(X_test) - 1)
+        
+# 2.补全 <2> 处代码，根据随机索引 idx，从测试数据 X_test 中取出对应的用户特征数据 x。
+x = X_test[idx]
+
+# 3.补全 <3> 处代码，调用预测函数 predict_user()，基于模型 model 和输入数据 x 计算流失概率 prob。
+prob = predict_user(model, x)
+
+# 4.补全 <4> 处代码，调用决策函数 decision_logic()，根据概率 prob 得到风险等级 level 和对应颜色 color。
+level, color = decision_logic(prob)
+
+# 5.补全 <5> 处代码，调用控制函数 control_light()，根据颜色 color 控制灯光。
+control_light(color)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤7. 系统效果可视化</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+# 1.补全 <1> 处代码，将当前得到的概率值 prob 添加到列表 probs 中。
+    probs.append(prob)
+
+# 2.补全 <2> 处代码，使用直方图函数 hist 对 probs 中的概率值进行可视化，并设置分箱数量为 30。
+plt.hist(probs, bins=30)
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <h3># 步骤8. 拓展——报警机制</h3>
+    <div class="card">
+        <div class="code-block">
+            <pre>
+                <code class="language-python">
+ # 1.补全 <1> 处代码，当预测概率 prob 大于 0.7 时，将连续高风险计数 count 加 1，否则将 count 重置为 0。(三行代码)
+        if prob > 0.7:
+            count += 1
+        else:
+            count = 0
+
+ # 2.补全 <2> 处代码，当连续高风险用户数量 count 达到或超过 threshold 时，输出报警提示信息。
+        if count >= threshold:
+
+# 3.补全 <3> 处代码，调用 light_controller 的方法，按照当前连续高风险次数进行闪烁提示。
+            light_controller.flash_times(count)
+            
+# 4.补全 <4> 处代码，在触发报警后，终止循环执行。
+            break
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <a id="back" href="#">返回</a>
 </body>
+
 </html>
