@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Task1</body>h1>
+    <h2>步骤1</h2>
+    <code>
+        #1.补全 <1> 处代码，打开USB摄像头设备（设备编号为0）。
+        cap = cv2.VideoCapture(0)
+        #2.补全 <2> 处代码，获取摄像头视频帧的宽度信息。
+        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        #3.补全 <3> 处代码，获取摄像头视频帧的高度信息。
+        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        #4.补全 <4> 处代码，设置视频编码格式（XVID），用于视频写入。
+        fourcc = cv2.VideoWriter_fourcc(*"XVID")
+        #5.补全 <5> 处代码，创建视频写入对象，输出文件名为 “capture.avi”。
+        out = cv2.VideoWriter('capture.avi', fourcc, 20.0, (width, height))
+    </code>
+</body>
+</html>
